@@ -1,3 +1,6 @@
+import { EventDispatcherInterface } from "../event/@shared/event-dispatcher.interface";
+import { CustomerCreatedEvent } from "../event/customer/events-types/customer-created.event";
+import { CustomerUpdatedAddress } from "../event/customer/events-types/customer-updated-address.event";
 import { Address } from "./address";
 
 export class Customer {
@@ -6,13 +9,17 @@ export class Customer {
   private _address!: Address;
   private _active: boolean;
   private _rewardPoints: number = 0;
+  private eventDispatcher?: EventDispatcherInterface;
 
-  constructor(id: string, name: string) {
+  constructor(id: string, name: string, eventDispatcher?: EventDispatcherInterface) {
     this._id = id;
     this._name = name;
     this._active = false;
 
     this.validate();
+
+    this.eventDispatcher = eventDispatcher;
+    eventDispatcher?.notify(new CustomerCreatedEvent({ customerName: name }));
   }
 
   addRewardPoints(points: number): void {
@@ -50,6 +57,13 @@ export class Customer {
 
   updateAddress(address: Address) {
     this._address = address;
+    this.eventDispatcher?.notify(
+      new CustomerUpdatedAddress({
+        customerId: this._id,
+        customerName: this._name,
+        newAddress: `${address.street}, ${address.number}`,
+      })
+    );
   }
 
   get zip(): string {

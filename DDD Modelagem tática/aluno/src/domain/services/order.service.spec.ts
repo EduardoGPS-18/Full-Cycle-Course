@@ -1,17 +1,18 @@
 import { Customer } from "../entities/customer";
 import { Order } from "../entities/order";
 import { OrderItem } from "../entities/order-item";
+import { EventDispatcher } from "../event/@shared/event-dispatcher";
 import { OrderService } from "./order.service";
 
 describe("Order service unit tests", () => {
   it("should throw error if order has no items", () => {
-    const customer = new Customer("1", "Customer 1");
+    const customer = new Customer("1", "Customer 1", new EventDispatcher());
 
     expect(() => OrderService.placeOrder(customer, [])).toThrowError("Order must have at least one item");
   });
 
   it("should place an order", () => {
-    const customer = new Customer("1", "Customer 1");
+    const customer = new Customer("1", "Customer 1", new EventDispatcher());
     const item1 = new OrderItem("i1", "Item 1", 10, "p1", 2);
 
     const order = OrderService.placeOrder(customer, [item1]);

@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import { Address } from "../../domain/entities/address";
 import { Customer } from "../../domain/entities/customer";
+import { EventDispatcher } from "../../domain/event/@shared/event-dispatcher";
 import { CustomerRepository } from "../../domain/repository/customer-repository.interface";
 import { CustomerModel } from "../db/sequelize/model/customer.model";
 
@@ -35,7 +36,7 @@ export class OrmCustomerRepository implements CustomerRepository {
 
   private toDomainCustomer(customerModel: CustomerModel): Customer {
     const { id, name, active, rewardPoints } = customerModel;
-    const customer = new Customer(id, name);
+    const customer = new Customer(id, name, new EventDispatcher());
 
     const { street, number, zip, city } = customerModel;
     const address = new Address(street, number, zip, city);

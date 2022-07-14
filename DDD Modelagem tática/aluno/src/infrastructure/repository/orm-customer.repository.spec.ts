@@ -1,6 +1,7 @@
 import { DataSource, Repository } from "typeorm";
 import { Address } from "../../domain/entities/address";
 import { Customer } from "../../domain/entities/customer";
+import { EventDispatcher } from "../../domain/event/@shared/event-dispatcher";
 import { CustomerModel } from "../db/sequelize/model/customer.model";
 import { OrmCustomerRepository } from "./orm-customer.repository";
 
@@ -30,7 +31,7 @@ describe("Customer Repository tests", () => {
   });
 
   it("should create a customer", async () => {
-    const customer = new Customer("1", "Customer 1");
+    const customer = new Customer("1", "Customer 1", new EventDispatcher());
     const address = new Address("Street 1", 1, "12345", "City 1");
     customer.updateAddress(address);
     customer.addRewardPoints(10);
@@ -52,7 +53,7 @@ describe("Customer Repository tests", () => {
   });
 
   it("should update a customer", async () => {
-    const customer = new Customer("1", "Customer 1");
+    const customer = new Customer("1", "Customer 1", new EventDispatcher());
     const address = new Address("Street 1", 1, "12345", "City 1");
     customer.updateAddress(address);
     customer.addRewardPoints(10);
@@ -79,7 +80,7 @@ describe("Customer Repository tests", () => {
 
   describe("find", () => {
     it("should find a customer", async () => {
-      const customer = new Customer("1", "Customer 1");
+      const customer = new Customer("1", "Customer 1", new EventDispatcher());
       const address = new Address("Street 1", 1, "12345", "City 1");
       customer.updateAddress(address);
       customer.addRewardPoints(10);
@@ -99,14 +100,14 @@ describe("Customer Repository tests", () => {
   });
 
   it("should find all customers", async () => {
-    const customer1 = new Customer("1", "Customer 1");
+    const customer1 = new Customer("1", "Customer 1", new EventDispatcher());
     const address1 = new Address("Street 1", 1, "12345", "City 1");
     customer1.updateAddress(address1);
     customer1.addRewardPoints(10);
     customer1.activate();
     await customerRepository.create(customer1);
 
-    const customer2 = new Customer("2", "Customer 1");
+    const customer2 = new Customer("2", "Customer 1", new EventDispatcher());
     const address2 = new Address("Street 1", 1, "12345", "City 1");
     customer2.updateAddress(address2);
     customer2.addRewardPoints(10);

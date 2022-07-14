@@ -4,6 +4,7 @@ import { Customer } from "../../domain/entities/customer";
 import { Order } from "../../domain/entities/order";
 import { OrderItem } from "../../domain/entities/order-item";
 import { Product } from "../../domain/entities/product";
+import { EventDispatcher } from "../../domain/event/@shared/event-dispatcher";
 import { CustomerModel } from "../db/sequelize/model/customer.model";
 import { OrderItemModel } from "../db/sequelize/model/order-item.model";
 import { OrderModel } from "../db/sequelize/model/order.model";
@@ -46,7 +47,7 @@ describe("Customer Repository tests", () => {
   });
 
   it("should create a new order", async () => {
-    const customer = new Customer("123", "Customer 1");
+    const customer = new Customer("123", "Customer 1", new EventDispatcher());
     const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
     customer.updateAddress(address);
     await customerRepository.create(customer);
@@ -85,7 +86,7 @@ describe("Customer Repository tests", () => {
   });
 
   it("should update an existing order", async () => {
-    const customer = new Customer("123", "Customer 1");
+    const customer = new Customer("123", "Customer 1", new EventDispatcher());
     const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
     customer.updateAddress(address);
     await customerRepository.create(customer);
@@ -130,7 +131,7 @@ describe("Customer Repository tests", () => {
   });
 
   it("should find a order", async () => {
-    const customer = new Customer("123", "Customer 1");
+    const customer = new Customer("123", "Customer 1", new EventDispatcher());
     const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
     customer.updateAddress(address);
     await customerRepository.create(customer);
@@ -162,7 +163,7 @@ describe("Customer Repository tests", () => {
   });
 
   it("should find all orders", async () => {
-    const customer = new Customer("123", "Customer 1");
+    const customer = new Customer("123", "Customer 1", new EventDispatcher());
     const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
     customer.updateAddress(address);
     await customerRepository.create(customer);
